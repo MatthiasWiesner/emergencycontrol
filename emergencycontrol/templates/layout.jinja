@@ -12,6 +12,7 @@
         {% for endpoint in [
           'index',
           'person' if not current_user.is_anonymous() else False,
+          'calendar' if not current_user.is_anonymous() else False,
           'signup' if current_user.is_anonymous() else False,
           'login' if current_user.is_anonymous() else 'logout',
         ] %}

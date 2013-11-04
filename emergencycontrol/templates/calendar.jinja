@@ -22,15 +22,15 @@ You are not logged in.
 		    </ul>
 		</div>
 	</div>
-</div>	
-<div class='row'>
-	<div claas='span9'>
-	{% for week in weeks %}
-	   <div class='span3'>
-	   	<h4>Week {{week.week_nr}}</h4>
-	    <p class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</p>
-	   </div>
-	{% endfor %}
+	<div>
+		<div claas='span9'>
+		{% for week in weeks %}
+		   <div class='span3'>
+		   	<h4>Week {{week.week_nr}}</h4>
+		    <p class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</p>
+		   </div>
+		{% endfor %}
+		</div>
 	</div>
 </div>
 {% endif %}
