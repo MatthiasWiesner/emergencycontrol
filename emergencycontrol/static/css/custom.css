@@ -1,50 +1,8 @@
-ul { margin:0px; margin-top:10px; padding:0px; text-align: center; }
-ul#player>li {
-	list-style-type: none;
-	border: 1px solid black;
-	margin-bottom: 2px;
-	width: 200px;
-	cursor: pointer;
+.droppable {
+	width: 150px;
+	padding: 3px;
 }
 
-ul#spielfeld>li {
-	list-style-type: none;
-	height: 40px;
-	width: 200px;
-	border: 1px solid black;
-	font-weight: bold;
-	
+.ui-state-hover {
+	background-color:#eee;
 }
-ul#spielfeld>li.red {
-	background: #FCC;
-}
-
-ul#spielfeld>li.black {
-	background: #CCC;
-}
-
-ul#spielfeld>li.black.back {
-	float: left;
-}
-
-ul#spielfeld>li.red.front {
-	margin-left: 220px;
-}
-
-ul#spielfeld>li.black.front {
-	margin-top: 20px;
-	float: left;
-}
-
-ul#spielfeld>li.red.back {
-	margin-top: 20px;
-	margin-left: 220px;
-}
-
-.slider-code { height: 25px; overflow:hidden; }
-.slider-code .viewport { float: left; width: 26px; height: 25px; overflow: hidden; position: relative; }
-.slider-code .buttons { display: block; margin: 0 10px 0 0; float: left; }
-.slider-code .next { margin: 0 0 0 10px;  }
-.slider-code .disable { visibility: hidden; }
-.slider-code .overview { list-style: none; position: absolute; padding: 0; margin: 0; left: 0; top: 0; }
-.slider-code .overview li{ float: left; margin: 0 2px 0 0; padding: 1px; height: 20px; border: 1px solid #dcdcdc; width: 20px;}
