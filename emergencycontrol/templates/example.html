@@ -29,15 +29,14 @@ var initdiv = document.getElementById(data).parentNode;
 var exchange = ev.target;
 exchange.parentNode.appendChild(document.getElementById(data));
 initdiv.appendChild(exchange);
-ajaxCalls("POST",resultdiv,"./testcall?emps="+exchange.id);
+ajaxCalls("POST","./testcall?emps="+exchange.id);
 }
 
 function ajaxCalls(method,url){
     xmlhttp=new XMLHttpRequest();
     xmlhttp.onreadystatechange=function(){
         if (xmlhttp.readyState==4 && xmlhttp.status==200){
-                if(tar!=null)
-                       alert("employee : "+xmlhttp.responseText[0]+" change with employee: " +xmlhttp.responseText[1]); 
+           alert("employee : "+xmlhttp.responseText); 
         }
     }
     xmlhttp.open(method,url,true);
