@@ -28,7 +28,7 @@ You are not logged in.
    <div class='span3' id="{{week.id}}" ondrop="drop(event)"
    ondragover="allowDrop(event)"><h4>Week {{week.week_nr}}</h4>
        <p id="{{week.person_id}}" draggable="true"
-       ondragstart="drag(event)">{{persons[week.person_id].name}}</p>
+       ondragstart="drag(event)"> {{week.person.name}} </p>
    </div>
 {% endfor %}
 </div>
