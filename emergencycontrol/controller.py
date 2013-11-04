@@ -1,9 +1,8 @@
 from emergencycontrol import app
-from flask import render_template, redirect, url_for, flash
+from flask import request, render_template, redirect, url_for, flash
 from .model import User, Person, db_session
 from .forms import PersonForm
 from flask.ext.login import login_required
-
 
 @app.route('/person', methods=['GET', 'POST'])
 @login_required
@@ -32,3 +31,12 @@ def reset():
     db_session.commit()
     flash('Person table resetted!', 'success')
     return redirect(url_for('person'))
+
+@app.route('/testcall')
+def testcall():
+    return request.args.get('emps')
+
+@app.route('/example')
+def example():
+    return render_template('example.html')
+
