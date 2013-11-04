@@ -3,6 +3,7 @@ from flask import request, render_template, redirect, url_for, flash
 from .model import User, Person, db_session, EmergencyService
 from .forms import PersonForm
 from flask.ext.login import login_required
+from datetime import datetime
 
 
 @app.route('/person', methods=['GET', 'POST'])
@@ -62,8 +63,10 @@ def testcall():
 
 @app.route('/calendar')
 def calendar():
+    current_week = datetime.now().isocalendar()[1]
     weeks = EmergencyService.query.all()
+    weeks_from_today = [week for week in weeks if week.week_nr >= current_week]
     persons = Person.query.all()
     for week in weeks:
         week.person = Person.query.get(week.person_id)
-    return render_template('calendar.jinja',weeks=weeks,persons=persons)
+    return render_template('calendar.jinja',weeks=weeks_from_today,persons=persons)

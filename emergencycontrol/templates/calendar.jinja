@@ -13,7 +13,7 @@ You are not logged in.
 		    <ul class='nav nav-list'>
 		        <li class='nav-header'>EMS Rotation</li>
 		        {% for person in persons %}
-		            {% if loop.first %}
+                    {% if weeks[0].person.id == person.id %}
 		                <li class='active'><strong>{{person.name}}</strong></li>
 		            {% else %}
 		                <li>{{person.name}}</li>
