@@ -1,0 +1,37 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Calendar{% endblock %}
+{% block content %}
+{% if current_user.is_anonymous() %}
+<p>
+You are not logged in.
+</p>
+{% else %}
+<div class='row'>
+<div class='span3'>
+<div class='well sidebar-nav'>
+    <ul class='nav nav-list'>
+        <li class='nav-header'>EMS Rotation</li>
+        {% for e in 
+        ['peter','alex','matthias','oscar','anna','robert'] %}
+            {% if loop.first %}
+                <li class='active'><strong>{{e}}</strong></li>
+            {% else %}
+                <li>{{e}}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+</div>
+<div class='row'>
+<div claas='span9'>
+{% for i in ['week1','week2','week3','week4','week5','week6'] %}
+   <div class='span3' id="{{i}}" ondrop="drop(event)" ondragover="allowDrop(event)"><h4>{{i}}</h4>
+       <p id="{{i+"emp"}}" draggable="true" ondragstart="drag(event)">{{i+"emp"}}</p>
+   </div>
+{% endfor %}
+</div>
+</div>
+</div>
+{% endif %}
+{% endblock %}

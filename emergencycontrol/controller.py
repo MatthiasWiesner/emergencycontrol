@@ -60,8 +60,6 @@ def reset():
 def testcall():
     return request.args.get('emps')
 
-
-@app.route('/example')
-def example():
-    return render_template('example.html')
-
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.jinja')
