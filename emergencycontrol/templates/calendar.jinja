@@ -24,7 +24,7 @@ You are not logged in.
 	</div>
 	<div class="row">
 	{% for week in weeks %}
-	   <div class='span3'>
+	   <div class='span3 week'>
 	   	<h4>Week {{week.week_nr}}</h4>
 	    <div class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</div>
 	   </div>

@@ -1,5 +1,6 @@
 $(".draggable").draggable({
-	helper : "clone"
+	helper : "clone",
+	cursor: "move"
 });
 
 $(".droppable").droppable({
