@@ -49,7 +49,7 @@ def testcall():
     return request.form['emps']
 
 @app.route('/example')
-def testcall():
+def example():
     return render_template('example.html')
 
 
