@@ -25,10 +25,9 @@ You are not logged in.
 <div class='row'>
 <div claas='span9'>
 {% for week in weeks %}
-   <div class='span3' id="{{week.id}}" ondrop="drop(event)"
-   ondragover="allowDrop(event)"><h4>Week {{week.week_nr}}</h4>
-       <p id="{{week.person_id}}" draggable="true"
-       ondragstart="drag(event)"> {{week.person.name}} </p>
+   <div class="span3">
+   	<h4>Week {{week.week_nr}}</h4>
+    <p class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</p>
    </div>
 {% endfor %}
 </div>
