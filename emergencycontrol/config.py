@@ -2,7 +2,7 @@ import os
 import json
 from datetime import timedelta
 
-credentials = json.loads(open(os.environ['CREDS']).read())
+credentials = json.load(open(os.environ['CRED_FILE']))
 
 DB_URI = 'mysql://{user}:{password}@{host}/{dbname}'.format(
     user=credentials['MYSQLS']['MYSQLS_USERNAME'],
