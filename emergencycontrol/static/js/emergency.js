@@ -1,21 +1,21 @@
-function allowDrop(ev)
-{
-    ev.preventDefault();
-}
+$(".draggable").draggable({
+	helper : "clone"
+});
 
-function drag(ev)
-{
-    ev.dataTransfer.setData("Text",ev.target.id);
-}
-
-function drop(ev)
-{
-    ev.preventDefault();
-    var data=ev.dataTransfer.getData("Text");
-    var initdiv = document.getElementById(data).parentNode;
-    var exchange = ev.target;
-    exchange.parentNode.appendChild(document.getElementById(data));
-    initdiv.appendChild(exchange);
-
-    $.post( "./swap", { week_from_id: exchange.id, week_to_id: data }); 
-}
+$(".droppable").droppable({
+	activeClass : "ui-state-default",
+	hoverClass : "ui-state-hover",
+	accept : ".droppable",
+	drop : function(event, ui) {
+		var nameFrom = ui.draggable.text();
+		var nameTo = $(this).text();
+		
+		$(this).text(nameFrom);
+		ui.draggable.text(nameTo);
+		
+		$.post("./swap", {
+			week_from_id : ui.draggable.attr("data-week-id"),
+			week_to_id : $(this).attr("data-week-id")
+		});
+	}
+});

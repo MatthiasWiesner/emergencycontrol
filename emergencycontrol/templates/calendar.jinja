@@ -8,30 +8,30 @@ You are not logged in.
 </p>
 {% else %}
 <div class='row'>
-<div class='span3'>
-<div class='well sidebar-nav'>
-    <ul class='nav nav-list'>
-        <li class='nav-header'>EMS Rotation</li>
-        {% for person in persons %}
-            {% if loop.first %}
-                <li class='active'><strong>{{person.name}}</strong></li>
-            {% else %}
-                <li>{{person.name}}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
-</div>
+	<div class='span3'>
+		<div class='well sidebar-nav'>
+		    <ul class='nav nav-list'>
+		        <li class='nav-header'>EMS Rotation</li>
+		        {% for person in persons %}
+		            {% if loop.first %}
+		                <li class='active'><strong>{{person.name}}</strong></li>
+		            {% else %}
+		                <li>{{person.name}}</li>
+		            {% endif %}
+		        {% endfor %}
+		    </ul>
+		</div>
+	</div>
+</div>	
 <div class='row'>
-<div claas='span9'>
-{% for week in weeks %}
-   <div class="span3">
-   	<h4>Week {{week.week_nr}}</h4>
-    <p class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</p>
-   </div>
-{% endfor %}
-</div>
-</div>
+	<div claas='span9'>
+	{% for week in weeks %}
+	   <div class='span3'>
+	   	<h4>Week {{week.week_nr}}</h4>
+	    <p class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</p>
+	   </div>
+	{% endfor %}
+	</div>
 </div>
 {% endif %}
 {% endblock %}
