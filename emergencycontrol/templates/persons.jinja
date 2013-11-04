@@ -15,10 +15,17 @@
   </div>
  </form>
 
-  <div class=control-group>
+  <table class="table table-bordered">
+    <tr>
+    <th>Name</th>
+    <th>Phone</th>
+    <tr>
     {% for person in persons %}
-      <li>{{ person.name }} {{ person.phone }}</a></li>
+       <tr>
+       <td>{{ person.name }}</td>
+       <td>{{ person.phone }}</td>
+       </tr>
     {% endfor %}
-  </div>
+  </table>
 
 {% endblock %}
