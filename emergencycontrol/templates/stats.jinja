@@ -1,0 +1,43 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Stats Page{% endblock %}
+{% block content %}
+<p>
+{% if current_user.is_anonymous() %}
+You are not logged in.
+{% else %}
+<table class="table table-bordered table-striped">
+    <thead>
+	<tr>
+		<th><a href="{{ url_for('stats', order="username") }}">Name</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="username", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="username", reverse="True") }}">&#x25BC;</a></div>
+		</th>
+		<th><a href="{{ url_for('stats', order="score") }}">Score</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="score", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="score", reverse="True") }}">&#x25BC;</a></div>
+		    <div style="float:right;">(won points/total games)&nbsp;</div>
+		</th>
+		<th><a href="{{ url_for('stats', order="received") }}">Received</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="received", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="received", reverse="True") }}">&#x25BC;</a></div>
+		</th>
+		<th>total games count</th>
+		<th>won games</th>
+	</tr>
+	</thead>
+	<tbody>
+  {% for player in players %}
+    <tr>
+        <td>{{ player['username'] }}</td>
+        <td>{{ player['score'] }}</td>
+        <td>{{ player['received'] }}</td>
+        <td>{{ player['total'] }}</td>
+        <td>{{ player['won'] }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+</p>
+{% endblock %}
