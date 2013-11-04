@@ -12,12 +12,11 @@ You are not logged in.
 <div class='well sidebar-nav'>
     <ul class='nav nav-list'>
         <li class='nav-header'>EMS Rotation</li>
-        {% for e in 
-        ['peter','alex','matthias','oscar','anna','robert'] %}
+        {% for person in persons %}
             {% if loop.first %}
-                <li class='active'><strong>{{e}}</strong></li>
+                <li class='active'><strong>{{person.name}}</strong></li>
             {% else %}
-                <li>{{e}}</li>
+                <li>{{person.name}}</li>
             {% endif %}
         {% endfor %}
     </ul>
@@ -25,9 +24,11 @@ You are not logged in.
 </div>
 <div class='row'>
 <div claas='span9'>
-{% for i in ['week1','week2','week3','week4','week5','week6'] %}
-   <div class='span3' id="{{i}}" ondrop="drop(event)" ondragover="allowDrop(event)"><h4>{{i}}</h4>
-       <p id="{{i+"emp"}}" draggable="true" ondragstart="drag(event)">{{i+"emp"}}</p>
+{% for week in weeks %}
+   <div class='span3' id="{{week.id}}" ondrop="drop(event)"
+   ondragover="allowDrop(event)"><h4>Week {{week.week_nr}}</h4>
+       <p id="{{week.person_id}}" draggable="true"
+       ondragstart="drag(event)">{{persons[week.person_id].name}}</p>
    </div>
 {% endfor %}
 </div>

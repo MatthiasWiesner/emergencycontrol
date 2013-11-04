@@ -62,4 +62,6 @@ def testcall():
 
 @app.route('/calendar')
 def calendar():
-    return render_template('calendar.jinja')
+    weeks = EmergencyService.query.all()
+    persons = Person.query.all()
+    return render_template('calendar.jinja',weeks=weeks,persons=persons)
