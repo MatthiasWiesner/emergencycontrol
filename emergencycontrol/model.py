@@ -41,9 +41,9 @@ Base.query = db_session.query_property()
 
 class User(UserMixin, Base):
     __tablename__ = 'users'
-    username = Column(Text, nullable=False, unique=False)
-    email = Column(Text, nullable=False, unique=True)
-    _password = Column('password', Text, nullable=False)
+    username = Column(String(255), nullable=False, unique=False)
+    email = Column(String(255), nullable=False, unique=True)
+    _password = Column('password', String(255), nullable=False)
     active = Column(Boolean, nullable=False, default=True)
 
     def get_auth_token(self):
@@ -71,18 +71,20 @@ class User(UserMixin, Base):
                                  self.username)
 
 
-class Game(Base):
-    __tablename__ = 'games'
+class Person(Base):
+    __tablename__ = 'persons'
     id = Column(Integer, primary_key=True)
-    teamBlack_result = Column(Integer, default=0)
-    teamRed_result = Column(Integer, default=0)
-    
-    teamBlack_frontend = Column(Integer, ForeignKey('users.id'))
-    teamBlack_backend = Column(Integer, ForeignKey('users.id'))
-    teamRed_frontend = Column(Integer, ForeignKey('users.id'))
-    teamRed_backend = Column(Integer, ForeignKey('users.id'))
+    name = Column(String(32))
+    phone = Column(String(32))
+    image_url = Column(String(255))
 
-    teamBlack_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamBlack_frontend")
-    teamBlack_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamBlack_backend")
-    teamRed_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamRed_frontend")
-    teamRed_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamRed_backend")
+
+class EmergencyService(Base):
+    __tablename__ = 'emergency_services'
+    id = Column(Integer, primary_key=True)
+    week_nr = Column(Integer)
+    start_date = Column(Date)
+    end_date = Column(Date)
+
+    person_id = Column(Integer, ForeignKey('persons.id'))
+    person_rel = relationship("Person", foreign_keys="[Person.id]", primaryjoin="Person.id==EmergencyService.person_id")

@@ -10,8 +10,8 @@ from flask.ext.login import (LoginManager,
                              logout_user,
                              current_user,
                              login_required)
-from .model import User, Game, init_engine, db_session
-from .forms import LoginForm, SignupForm, GameForm
+from .model import User, Person, init_engine, db_session
+from .forms import LoginForm, SignupForm
 from .auth import (authorized,
                    require,
                    IsUser,

@@ -11,8 +11,7 @@
       <ul class=nav>
         {% for endpoint in [
           'index',
-          'game' if not current_user.is_anonymous() else False,
-          'stats' if not current_user.is_anonymous() else False,
+          'person' if not current_user.is_anonymous() else False,
           'signup' if current_user.is_anonymous() else False,
           'login' if current_user.is_anonymous() else 'logout',
         ] %}
