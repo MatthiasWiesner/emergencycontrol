@@ -44,6 +44,14 @@ def favicon():
 def index():
     return render_template('index.jinja')
 
+@app.route('/testcall', methods=['POST'])
+def testcall():
+    return request.form['emps']
+
+@app.route('/example')
+def testcall():
+    return render_template('example.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
