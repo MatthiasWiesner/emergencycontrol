@@ -65,9 +65,10 @@ def set():
 @app.route('/calendar')
 def calendar():
     now = date.today()
-    weeks = EmergencyService.query.order_by(EmergencyService.start_date.asc()).all()
-    weeks_from_today = [week for week in weeks if week.end_date >= now]
-    
+    weeks_from_today = EmergencyService.query\
+        .filter(EmergencyService.end_date >= now)\
+        .order_by(EmergencyService.start_date.asc()).all()
+
     c = len(weeks_from_today)
     if c < 12:
         last_week = weeks_from_today[c-1]
@@ -84,14 +85,32 @@ def calendar():
             db_session.add(es)
             new_weeks += 1
         db_session.commit()
+        return redirect(url_for('calendar'))
 
+    persons = Person.query.all()
+    for week in weeks_from_today:
+        for p in persons:
+            if p.id == week.person_id:
+                week.person = p
+    return render_template('calendar.jinja', weeks=weeks_from_today, persons=persons)
+
+
+@app.route('/incidents', methods=['GET', 'POST'])
+@login_required
+def incidents():
+    weeks = EmergencyService.query.order_by(EmergencyService.start_date.asc()).all()
     persons = Person.query.all()
     for week in weeks:
         for p in persons:
             if p.id == week.person_id:
                 week.person = p
-    return render_template('calendar.jinja',weeks=weeks_from_today,persons=persons)
+    return render_template('incidents.jinja', weeks=weeks)
 
+
+@app.route('/save', methods=['GET', 'POST'])
+def save():
+    print request.form
+    return ''
 
 
 @app.route('/reset', methods=['GET', 'POST'])

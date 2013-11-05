@@ -73,6 +73,7 @@ class User(UserMixin, Base):
 
 class Person(Base):
     __tablename__ = 'persons'
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
     id = Column(Integer, primary_key=True)
     name = Column(String(32))
     phone = Column(String(32))
@@ -82,6 +83,7 @@ class Person(Base):
 class EmergencyService(Base):
     __tablename__ = 'emergency_services'
     id = Column(Integer, primary_key=True)
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
     week_nr = Column(Integer)
     start_date = Column(Date)
     end_date = Column(Date)
@@ -92,11 +94,12 @@ class EmergencyService(Base):
 
 class Incident(Base):
     __tablename__ = 'incidents'
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
     id = Column(Integer, primary_key=True)
     text = Column(Text)
 
     users_id = Column(Integer, ForeignKey('users.id'))
-    users_rel = relationship("User", foreign_keys="[Users.id]", primaryjoin="Users.id==Incident.users_id")
+    users_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Incident.users_id")
 
     emergency_service_id = Column(Integer, ForeignKey('emergency_services.id'))
     emergency_service_rel = relationship("EmergencyService", foreign_keys="[EmergencyService.id]", primaryjoin="EmergencyService.id==Incident.emergency_service_id")

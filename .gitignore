@@ -3,3 +3,4 @@
 .pydevproject
 .buildpath
 creds.json
+dump.sql

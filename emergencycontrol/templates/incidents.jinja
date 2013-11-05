@@ -1,0 +1,19 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Calendar{% endblock %}
+{% block content %}
+{% if current_user.is_anonymous() %}
+<p>
+You are not logged in.
+</p>
+{% else %}
+<div id='accordion' class='row'>
+    {% for week in weeks %}
+        <h4>Week {{week.week_nr}}</h4>
+        <div class='editor' data-week-id="{{week.id}}">
+            sdkfgsid fgsodifg sidfg sögf ös
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

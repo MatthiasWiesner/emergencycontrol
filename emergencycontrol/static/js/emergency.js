@@ -25,10 +25,26 @@ $(".droppable").droppable({
 			$(this).removeClass("notassigned");
 			
 			console.log("SET")
-			$.post("./set", {
+			$.post("/set", {
 				person_id : ui.draggable.attr("data-person-id"),
 				week_id : $(this).attr("data-week-id")
 			});
 		} 
 	}
+});
+
+$("#accordion").accordion({
+    collapsible: true
+});
+
+$(".editor").editable({
+    lineBreaks : false,
+    callback: function(data){
+        if(data.content){
+            $.post('/save', {
+                week_id: data.$el.attr("data-week-id"),
+                data: data.content
+            });
+        }
+    }
 });
