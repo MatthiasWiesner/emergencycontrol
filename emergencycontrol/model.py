@@ -88,3 +88,15 @@ class EmergencyService(Base):
 
     person_id = Column(Integer, ForeignKey('persons.id'))
     person_rel = relationship("Person", foreign_keys="[Person.id]", primaryjoin="Person.id==EmergencyService.person_id")
+
+
+class Incident(Base):
+    __tablename__ = 'incidents'
+    id = Column(Integer, primary_key=True)
+    text = Column(Text)
+
+    users_id = Column(Integer, ForeignKey('users.id'))
+    users_rel = relationship("User", foreign_keys="[Users.id]", primaryjoin="Users.id==Incident.users_id")
+
+    emergency_service_id = Column(Integer, ForeignKey('emergency_services.id'))
+    emergency_service_rel = relationship("EmergencyService", foreign_keys="[EmergencyService.id]", primaryjoin="EmergencyService.id==Incident.emergency_service_id")
