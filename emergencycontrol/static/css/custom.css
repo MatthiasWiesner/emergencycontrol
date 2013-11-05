@@ -1,3 +1,7 @@
+.long {
+	height: 500px;
+}
+
 .droppable {
 	padding: 3px;
 }
@@ -10,7 +14,16 @@
 	padding: 4px;
 }
 
-.ui-state-hover {
+.draggable-hover {
 	background-color:#eed;
 	border-radius: 4px;
+}
+
+.droppable-hover {
+	background-color:#eed;
+	border-radius: 4px;
+}
+
+.notassigned {
+	background-color: #fdd;
 }

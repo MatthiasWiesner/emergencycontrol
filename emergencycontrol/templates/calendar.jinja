@@ -8,27 +8,33 @@ You are not logged in.
 </p>
 {% else %}
 <div class='row'>
-	<div class='span3'>
+	<div class='span2'>
 		<div class='well sidebar-nav'>
 		    <ul class='nav nav-list'>
 		        <li class='nav-header'>EMS Rotation</li>
 		        {% for person in persons %}
                     {% if weeks[0].person.id == person.id %}
-		                <li class='active'><strong>{{person.name}}</strong></li>
+		                <li class='draggable active' data-person-id="{{person.id}}"><strong>{{person.name}}</strong></li>
 		            {% else %}
-		                <li>{{person.name}}</li>
+		                <li class='draggable' data-person-id="{{person.id}}">{{person.name}}</li>
 		            {% endif %}
 		        {% endfor %}
 		    </ul>
 		</div>
 	</div>
-	<div class="row">
-	{% for week in weeks %}
-	   <div class='span3 week'>
-	   	<h4>Week {{week.week_nr}}</h4>
-	    <div class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</div>
-	   </div>
-	{% endfor %}
+	<div class="span9">
+		<div class="row">
+		{% for week in weeks %}
+		   <div class='span3 week'>
+		   	<h4>Week {{week.week_nr}}</h4>
+		   	{% if week.person %}
+		    <div class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</div>
+		    {% else %}
+		    <div class="draggable droppable notassigned" data-week-id="{{week.id}}">No person assigned</div>
+		    {% endif %}
+		   </div>
+		{% endfor %}
+		</div>
 	</div>
 </div>
 {% endif %}
