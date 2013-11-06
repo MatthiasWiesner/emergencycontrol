@@ -10,8 +10,8 @@ You are not logged in.
 <div id='accordion' class='row'>
     {% for week in weeks %}
         <h4>Week {{week.week_nr}}</h4>
-        <div class='editor' data-week-id="{{week.id}}">
-            sdkfgsid fgsodifg sidfg sögf ös
+        <div class='editor' data-week-id="{{week.id}}" {% if week.incident %}{{ week.incident.id }}{% endif %}>
+            {% if week.incident %}{{ week.incident.html }}{% endif %}
         </div>
     {% endfor %}
 </div>

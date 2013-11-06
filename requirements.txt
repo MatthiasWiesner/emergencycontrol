@@ -5,3 +5,4 @@ Flask-Script
 simple-pbkdf2
 SQLAlchemy
 mysql-python
+markdown

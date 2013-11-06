@@ -1,9 +1,11 @@
 from emergencycontrol import app
 from flask import request, render_template, redirect, url_for, flash
-from .model import Person, db_session, EmergencyService
+from flask_login import current_user
+from .model import Person, db_session, EmergencyService, Incident
 from .forms import PersonForm
 from flask.ext.login import login_required
 from datetime import date, datetime, timedelta
+from markdown import markdown
 
 
 @app.route('/person', methods=['GET', 'POST'])
@@ -99,18 +101,37 @@ def calendar():
 @login_required
 def incidents():
     weeks = EmergencyService.query.order_by(EmergencyService.start_date.asc()).all()
-    persons = Person.query.all()
     for week in weeks:
-        for p in persons:
-            if p.id == week.person_id:
-                week.person = p
+        if week.person_id:
+            week.person = Person.query.get(week.person_id)
+        incident = Incident.query.filter(Incident.emergency_service_id == week.id).first()
+        if incident:
+            incident.html = markdown(unicode(incident.text))
+            week.incident = incident
     return render_template('incidents.jinja', weeks=weeks)
 
 
-@app.route('/save', methods=['GET', 'POST'])
+@app.route('/savetext', methods=['POST'])
 def save():
-    print request.form
-    return ''
+    week_id = int(request.form['week_id'])
+    text = request.form['text']
+    incident = Incident.query.filter(Incident.emergency_service_id == week_id).first()
+    if not incident:
+        incident = Incident(emergency_service_id=week_id)
+    incident.text = text
+    db_session.add(incident)
+    db_session.commit()
+    return markdown(text)
+
+
+@app.route('/gettext', methods=['GET'])
+def gettext():
+    week_id = int(request.args.get('week_id'))
+    incident = Incident.query.filter(Incident.emergency_service_id == week_id).first()
+    if incident:
+        return incident.text
+    else:
+        return ""
 
 
 @app.route('/reset', methods=['GET', 'POST'])

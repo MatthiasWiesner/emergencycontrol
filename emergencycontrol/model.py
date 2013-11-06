@@ -12,7 +12,7 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
 
 def init_engine(db_uri):
     global db_engine
-    db_engine = create_engine(db_uri)
+    db_engine = create_engine(db_uri, encoding='utf-8')
     db_session.configure(bind=db_engine)
 
 

@@ -41,10 +41,22 @@ $(".editor").editable({
     lineBreaks : false,
     callback: function(data){
         if(data.content){
-            $.post('/save', {
+            var text = data.content.replace(/[^\S\n]/g, ' ')
+            $.post('/savetext', {
                 week_id: data.$el.attr("data-week-id"),
-                data: data.content
+                text: text
+            }).done(function(response){
+                data.$el.html(response);
             });
         }
     }
+});
+
+$(".editor").on('edit', function(event, $editor){
+    $editor.val("..load content");
+    $.get('/gettext', {
+        week_id: $(this).attr("data-week-id")
+    }).done(function(data){
+        $editor.val(data);
+    });
 });

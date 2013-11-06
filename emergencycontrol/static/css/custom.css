@@ -29,3 +29,8 @@
 .notassigned {
 	background-color: #fdd;
 }
+
+textarea! {
+  white-space: nowrap;
+  word-wrap: normal;
+}
