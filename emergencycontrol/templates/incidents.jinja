@@ -1,6 +1,6 @@
 {% extends 'layout.jinja' %}
 
-{% block title %}Calendar{% endblock %}
+{% block title %}Incidents{% endblock %}
 {% block content %}
 {% if current_user.is_anonymous() %}
 <p>
@@ -10,8 +10,13 @@ You are not logged in.
 <div id='accordion' class='row'>
     {% for week in weeks %}
         <h4>Week {{week.week_nr}}</h4>
-        <div class='editor' data-week-id="{{week.id}}" {% if week.incident %}{{ week.incident.id }}{% endif %}>
-            {% if week.incident %}{{ week.incident.html }}{% endif %}
+        <div class="editor_pane">
+            <div class='editor' data-week-id="{{week.id}}" {% if week.incident %}{{ week.incident.id }}{% endif %}>
+                {% if week.incident %}{{ week.incident.html }}{% endif %}
+            </div>
+            {% if week.incident and week.incident.last_user %}
+            <p>Last edited by: {{ week.incident.last_user.username }}</p>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

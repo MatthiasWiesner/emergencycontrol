@@ -41,12 +41,15 @@ $(".editor").editable({
     lineBreaks : false,
     callback: function(data){
         if(data.content){
-            var text = data.content.replace(/[^\S\n]/g, ' ')
+            var text = data.content
+            //text = text.replace(/<br \/>/g, '\n')
+            //text = text.replace(/[^\S\n]/g, ' ')
             $.post('/savetext', {
                 week_id: data.$el.attr("data-week-id"),
                 text: text
             }).done(function(response){
                 data.$el.html(response);
+                $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
             });
         }
     }
@@ -60,3 +63,5 @@ $(".editor").on('edit', function(event, $editor){
         $editor.val(data);
     });
 });
+
+hljs.initHighlightingOnLoad();

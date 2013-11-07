@@ -30,7 +30,18 @@
 	background-color: #fdd;
 }
 
-textarea! {
-  white-space: nowrap;
+textarea {
+  white-space: nowrap!;
   word-wrap: normal;
+}
+
+.editor {
+    min-height: 50px;
+    border-right: 1px dashed silver;
+    border-bottom: 1px solid silver;
+    margin-top: -10px;
+}
+
+.editor_pane {
+    padding-top: 0px;
 }

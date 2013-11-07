@@ -1,7 +1,7 @@
 from emergencycontrol import app
 from flask import request, render_template, redirect, url_for, flash
 from flask_login import current_user
-from .model import Person, db_session, EmergencyService, Incident
+from .model import Person, db_session, EmergencyService, Incident, User
 from .forms import PersonForm
 from flask.ext.login import login_required
 from datetime import date, datetime, timedelta
@@ -106,7 +106,9 @@ def incidents():
             week.person = Person.query.get(week.person_id)
         incident = Incident.query.filter(Incident.emergency_service_id == week.id).first()
         if incident:
-            incident.html = markdown(unicode(incident.text))
+            incident.html = markdown(unicode(incident.text), ['fenced_code'])
+            if incident.users_id:
+                incident.last_user = User.query.get(incident.users_id)
             week.incident = incident
     return render_template('incidents.jinja', weeks=weeks)
 
@@ -119,9 +121,10 @@ def save():
     if not incident:
         incident = Incident(emergency_service_id=week_id)
     incident.text = text
+    incident.users_id = current_user.id
     db_session.add(incident)
     db_session.commit()
-    return markdown(text)
+    return markdown(text, ['fenced_code'])
 
 
 @app.route('/gettext', methods=['GET'])
