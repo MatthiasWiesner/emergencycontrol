@@ -1,9 +1,14 @@
-from flask.ext.script import Manager
+from flask.ext.script import Manager, Server
 
 from emergencycontrol import app
 from emergencycontrol.model import init_db, clear_db
 
 manager = Manager(app)
+if app.debug:
+    server = Server()
+else:
+    server = Server(host="0.0.0.0", use_debugger=False)
+manager.add_command("runserver", server)
 
 
 @manager.command

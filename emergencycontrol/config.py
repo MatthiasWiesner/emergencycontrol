@@ -9,7 +9,9 @@ DB_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf8'.format(
     password=credentials['MYSQLS']['MYSQLS_PASSWORD'],
     host=credentials['MYSQLS']['MYSQLS_HOSTNAME'],
     dbname=credentials['MYSQLS']['MYSQLS_DATABASE'])
-DEBUG = True
+
+DEBUG = bool(os.getenv('DEBUG'))
+
 SECRET_KEY = 'foobarbaz'
 PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
 REMEMBER_COOKIE_DURATION = timedelta(days=30)
