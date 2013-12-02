@@ -17,12 +17,16 @@ You are not logged in.
             <span class="adcloud">Adcloud messages: {{ week.adcloud_count }}</span>
             <ul>
             {% for m in week.mails %}
-                <li>{{ m.date }} - {{ m.get('Subject') }}</li>
+                <li class="mail">{{ m.date }} - {{ m.get('Subject') }}
+                    <div class="payload">{{ m.get_payload() }}</div>
+                </li>
             {% endfor %}
             </ul>
         </div>
     {% endfor %}
 </div>
 </div>
+<script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
 {% endif %}
 {% endblock %}
+

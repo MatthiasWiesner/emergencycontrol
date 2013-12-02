@@ -5,6 +5,12 @@
 <link rel=stylesheet media=screen href="{{ url_for('static', filename='css/custom.css') }}">
 <link rel=stylesheet media=screen href="{{ url_for('static', filename='css/smoothness/jquery-ui-1.10.3.custom.min.css') }}">
 <link rel=stylesheet media=screen href="{{ url_for('static', filename='css/styles/default.css') }}">
+
+<script src="{{ url_for('static', filename='js/jquery-1.9.1.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui-1.10.3.custom.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/emergency.js') }}"></script>
+
 <div class=container>
   <div class=navbar>
     <div class=navbar-inner>
@@ -41,10 +47,3 @@
 {% block content %}
 {% endblock %}
 </div>
-
-<script src="{{ url_for('static', filename='js/jquery-1.9.1.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery-ui-1.10.3.custom.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.editable.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/highlight.pack.js') }}"></script>
-<script src="{{ url_for('static', filename='js/emergency.js') }}"></script>

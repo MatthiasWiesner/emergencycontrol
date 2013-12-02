@@ -59,6 +59,20 @@ div#alerts .total {
     margin-bottom: 3px;
 }
 
+div#alerts .mail {
+    cursor: pointer;
+}
+
+div#alerts .mail .payload {
+    display: none;
+    font-family: courier;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 2px;
+    margin-bottom: 4px;
+}
+
 div#alerts h4 .date {
     float:right;
     font-size: 80%;
