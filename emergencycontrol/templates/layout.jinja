@@ -14,6 +14,7 @@
           'index',
           'person' if not current_user.is_anonymous() else False,
           'calendar' if not current_user.is_anonymous() else False,
+          'alerts' if not current_user.is_anonymous() else False,
           'incidents' if not current_user.is_anonymous() else False,
           'signup' if current_user.is_anonymous() else False,
           'login' if current_user.is_anonymous() else 'logout',

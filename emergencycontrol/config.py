@@ -2,7 +2,11 @@ import os
 import json
 from datetime import timedelta
 
-credentials = json.load(open(os.environ['CRED_FILE']))
+credentials = None
+config_vars = None
+if not credentials:
+    credentials = json.load(open(os.environ['CRED_FILE']))
+    config_vars = credentials['CONFIG']['CONFIG_VARS']
 
 DB_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf8'.format(
     user=credentials['MYSQLS']['MYSQLS_USERNAME'],

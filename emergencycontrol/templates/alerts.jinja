@@ -1,0 +1,28 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Alerts{% endblock %}
+{% block content %}
+{% if current_user.is_anonymous() %}
+<p>
+You are not logged in.
+</p>
+{% else %}
+<div id="alerts">
+<div id='accordion' class='row'>
+    {% for week in weeks %}
+        <h4>Week {{week.week_nr}} <span class="date">{{week.start_date}} - {{week.end_date}}</span></h4>
+        <div>
+            <span class="hero">Hero: {{ week.person.name }}</span>
+            <span class="total">Total messages: {{ week.mails|length }}</span>
+            <span class="adcloud">Adcloud messages: {{ week.adcloud_count }}</span>
+            <ul>
+            {% for m in week.mails %}
+                <li>{{ m.date }} - {{ m.get('Subject') }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
+{% endblock %}

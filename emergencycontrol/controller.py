@@ -5,7 +5,10 @@ from .model import Person, db_session, EmergencyService, Incident, User
 from .forms import PersonForm
 from flask.ext.login import login_required
 from datetime import date, datetime, timedelta
+import time
 from markdown import markdown
+import email.utils
+from .alerts import get_mails
 
 
 @app.route('/person', methods=['GET', 'POST'])
@@ -135,6 +138,39 @@ def gettext():
         return incident.text
     else:
         return ""
+
+
+@app.route('/alerts')
+@login_required
+def alerts():
+    now = date.today()
+    weeks_until_today = EmergencyService.query\
+        .filter(EmergencyService.end_date <= now)\
+        .order_by(EmergencyService.start_date.asc()).all()
+
+    since = weeks_until_today[0].start_date.strftime("%d-%b-%Y")
+    before = (date.today() + timedelta(1)).strftime("%d-%b-%Y")
+
+    mails = get_mails(since, before)
+    persons = Person.query.all()
+
+    for week in weeks_until_today:
+        week.mails = []
+        for mail in mails:
+            pd = email.utils.parsedate(mail.get("Date"))
+            mdate = date.fromtimestamp(time.mktime(pd))
+            mail.date = mdate.strftime('%d.%m.%Y')
+            if mdate >= week.start_date and mdate < week.end_date:
+                week.mails.append(mail)
+            week.adcloud_count = 0
+            if 'adcloud' in mail.get_payload().lower():
+                week.adcloud_count += 1
+
+        for p in persons:
+            if p.id == week.person_id:
+                week.person = p
+
+    return render_template('alerts.jinja', weeks=weeks_until_today)
 
 
 @app.route('/reset', methods=['GET', 'POST'])

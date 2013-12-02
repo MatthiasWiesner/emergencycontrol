@@ -34,7 +34,8 @@ $(".droppable").droppable({
 });
 
 $("#accordion").accordion({
-    collapsible: true
+    collapsible: true,
+    heightStyle: "content"
 });
 
 $(".editor").editable({
