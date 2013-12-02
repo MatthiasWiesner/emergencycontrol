@@ -10,6 +10,7 @@ from flask.ext.login import (LoginManager,
                              logout_user,
                              current_user,
                              login_required)
+from flask_sslify import SSLify
 from .model import User, Person, init_engine, db_session
 from .forms import LoginForm, SignupForm
 from .auth import (authorized,
@@ -24,6 +25,8 @@ from . import config
 app = Flask(__name__)
 app.config.from_object(config)
 app.jinja_env.globals['authorized'] = authorized
+
+sslify = SSLify(app)
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'
