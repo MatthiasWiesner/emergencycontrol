@@ -145,10 +145,10 @@ def gettext():
 def alerts():
     now = date.today()
     weeks_until_today = EmergencyService.query\
-        .filter(EmergencyService.end_date <= now)\
-        .order_by(EmergencyService.start_date.asc()).all()
+        .filter(EmergencyService.start_date <= now)\
+        .order_by(EmergencyService.start_date.desc()).all()
 
-    since = weeks_until_today[0].start_date.strftime("%d-%b-%Y")
+    since = weeks_until_today[-1].start_date.strftime("%d-%b-%Y")
     before = (date.today() + timedelta(1)).strftime("%d-%b-%Y")
 
     mails = get_mails(since, before)
@@ -159,7 +159,7 @@ def alerts():
         for mail in mails:
             pd = email.utils.parsedate(mail.get("Date"))
             mdate = date.fromtimestamp(time.mktime(pd))
-            mail.date = mdate.strftime('%d.%m.%Y')
+            mail.date = datetime.fromtimestamp(time.mktime(pd)).strftime('%d.%m.%Y - %H:%M:%S')
             if mdate >= week.start_date and mdate < week.end_date:
                 week.mails.append(mail)
             week.adcloud_count = 0
