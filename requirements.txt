@@ -3,7 +3,8 @@ Flask-Login
 Flask-WTF
 Flask-Script
 Flask-SSLify
+Flask-OAuth
 simple-pbkdf2
 SQLAlchemy
 mysql-python
-markdown
+requests==0.13.5

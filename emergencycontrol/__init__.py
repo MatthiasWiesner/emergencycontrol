@@ -1,100 +1,109 @@
 import os
-from flask import (Flask,
-                   render_template,
-                   request,redirect,
-                   url_for, flash,
-                   session,
-                   send_from_directory)
-from flask.ext.login import (LoginManager,
-                             login_user,
-                             logout_user,
-                             current_user,
-                             login_required)
+from json import loads
+import requests
+from flask import (
+    Flask,
+    session,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    send_from_directory)
+from flask_login import (
+    LoginManager,
+    login_user,
+    logout_user,
+    login_required)
+from flask_oauth import OAuth
 from flask_sslify import SSLify
-from .model import User, Person, init_engine, db_session
-from .forms import LoginForm, SignupForm
-from .auth import (authorized,
-                   require,
-                   IsUser,
-                   Any,
-                   login_serializer)
-from itsdangerous import constant_time_compare, BadData
-from hashlib import sha1
+
+from .model import Person, init_engine, db_session
+
 from . import config
-
 app = Flask(__name__)
+app.debug = config.DEBUG
 app.config.from_object(config)
-app.jinja_env.globals['authorized'] = authorized
-
-sslify = SSLify(app, subdomains=True)
-
-login_manager = LoginManager()
-login_manager.login_view = 'login'
-login_manager.init_app(app)
+SSLify(app, subdomains=True)
 
 init_engine(app.config['DB_URI'])
 
-from . import controller
+oauth = OAuth()
+google = oauth.remote_app(
+    'google',
+    base_url='https://www.google.com/accounts/',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    request_token_url=None,
+    request_token_params= {
+        'scope':
+            'https://www.googleapis.com/auth/userinfo.email \
+             https://www.googleapis.com/auth/userinfo.profile',
+        'response_type': 'code'},
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_method='POST',
+    access_token_params={'grant_type': 'authorization_code'},
+    consumer_key='747740959147-a1oj10ealq6q58gebu89uthqanpq2dl7.apps.googleusercontent.com',
+    consumer_secret='CdNLY5AK5ZCl-UCs_5DWQcFd')
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+# needs the LoginManager to reload a person
+@login_manager.user_loader
+def load_user(person_id):
+    return Person.load(person_id)
+
+
+from . import calendar
+from . import person
+from . import alerts
 
 
 @app.route('/')
 def index():
     return render_template('index.jinja')
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated():
-        return redirect(url_for('index'))
 
-    form = SignupForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None:
-            if form.password.data == form.password_confirm.data:
-                user = User(username=form.username.data, email=form.email.data, password=form.password.data)
-                db_session.add(user)
-                db_session.commit()
-                if login_user(user, remember=form.remember.data):
-                    # Enable session expiration only if user hasn't chosen to be
-                    # remembered.
-                    session.permanent = not form.remember.data
-                    flash('Logged in successfully!', 'success')
-                    return redirect(request.args.get('next') or url_for('index'))
-                else:
-                    flash('This email is disabled!', 'error')
-            else:
-                flash('Wrong password!', 'error')
-        else:
-            flash('User already exists!', 'error')
-    return render_template('signup.jinja', form=form)
-
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
-    if current_user.is_authenticated():
-        return redirect(url_for('index'))
+    session['next'] = request.args.get('next') or request.referrer or None
+    callback=url_for('google_callback', _external=True)
+    return google.authorize(callback=callback)
 
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.valid_password(form.password.data):
-            if login_user(user, remember=form.remember.data):
-                # Enable session expiration only if user hasn't chosen to be
-                # remembered.
-                session.permanent = not form.remember.data
+
+@app.route('/google_callback')
+@google.authorized_handler
+def google_callback(resp):
+    access_token = resp['access_token']
+    session['access_token'] = access_token, ''
+    if access_token:
+        r = requests.get('https://www.googleapis.com/oauth2/v1/userinfo',
+            headers={'Authorization': 'OAuth ' + access_token})
+        if r.ok:
+            google_profile = loads(r.text)
+            if not 'hd' in google_profile or google_profile['hd'] != 'cloudcontrol.de':
+                flash("You are not from cloudControl", 'error')
+                return redirect(url_for('index'))
+            person = Person.query.filter_by(google_id=google_profile['id']).first()
+            if person is None:
+                keys = ['phone', 'picture', 'link', 'name','hd', 'email']
+                data = dict([(k,google_profile[k]) for k in keys if k in google_profile])
+                data['google_id'] = google_profile['id']
+
+                person = Person(**data)
+                db_session.add(person)
+                db_session.commit()
+            if login_user(person):
                 flash('Logged in successfully!', 'success')
                 return redirect(request.args.get('next') or url_for('index'))
             else:
-                flash('This username is disabled!', 'error')
+                flash('This person is disabled!', 'error')
         else:
-            flash('Wrong username or password!', 'error')
-    return render_template('login.jinja', form=form)
+            flash('Invalid google response!', 'error')
+
+    return redirect(url_for('index'))
 
 
 @app.route('/logout')
@@ -105,25 +114,10 @@ def logout():
     return redirect(url_for('index'))
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
-
-@login_manager.token_loader
-def load_token(token):
-    try:
-        max_age = app.config['REMEMBER_COOKIE_DURATION'].total_seconds()
-        user_id, hash_a = login_serializer.loads(token, max_age=max_age)
-    except BadData:
-        return None
-    user = User.query.get(user_id)
-    if user is not None:
-        hash_a = hash_a.encode('utf-8')
-        hash_b = sha1(user.password).hexdigest()
-        if constant_time_compare(hash_a, hash_b):
-            return user
-    return None
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+        'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.teardown_request

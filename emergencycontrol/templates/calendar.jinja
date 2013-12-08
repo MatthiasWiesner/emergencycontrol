@@ -1,5 +1,4 @@
 {% extends 'layout.jinja' %}
-
 {% block title %}Calendar{% endblock %}
 {% block content %}
 {% if current_user.is_anonymous() %}
@@ -9,11 +8,11 @@ You are not logged in.
 {% else %}
 <div class='row'>
 	<div class='span2'>
-		<div class='well sidebar-nav'>
+		<div id="ems_rotation" class='well sidebar-nav'>
 		    <ul class='nav nav-list'>
 		        <li class='nav-header'>EMS Rotation</li>
 		        {% for person in persons %}
-                    {% if weeks[0].person.id == person.id %}
+                    {% if person.active %}
 		                <li class='draggable active' data-person-id="{{person.id}}"><strong>{{person.name}}</strong></li>
 		            {% else %}
 		                <li class='draggable' data-person-id="{{person.id}}">{{person.name}}</li>
@@ -23,18 +22,8 @@ You are not logged in.
 		</div>
 	</div>
 	<div class="span10">
-		<div class="row">
-		{% for week in weeks %}
-		   <div class='span3 week'>
-		   	<h4>Week {{week.week_nr}}</h4>
-		   	{% if week.person %}
-		    <div class="draggable droppable" data-week-id="{{week.id}}">{{week.person.name}}</div>
-		    {% else %}
-		    <div class="draggable droppable notassigned" data-week-id="{{week.id}}">No person assigned</div>
-		    {% endif %}
-		   </div>
-		{% endfor %}
-		</div>
+	    <a id="calendar_load_switch"></a>
+		<div id="calendar_weeks" class="row"></div>
 	</div>
 </div>
 <script src="{{ url_for('static', filename='js/calendar.js') }}"></script>

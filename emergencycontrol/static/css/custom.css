@@ -4,8 +4,16 @@
      margin-right: auto;
 }
 
+.draggable {
+    cursor:move;
+}
+
 .droppable {
 	padding: 3px;
+}
+
+#calendar_load_switch {
+    cursor:pointer;
 }
 
 .week {
@@ -16,6 +24,15 @@
 	padding: 4px;
 }
 
+#ems_rotation {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+#ems_rotation .draggable {
+    width: 100px;
+    height: 20px;
+    overflow: hidden;
+}
 .draggable-hover {
 	background-color:#eed;
 	border-radius: 4px;
@@ -76,4 +93,15 @@ div#alerts .mail .payload {
 div#alerts h4 .date {
     float:right;
     font-size: 80%;
+}
+
+table.person th.picture {
+    width: 100px;
+}
+table.person th.phone {
+    width: 350px;
+}
+table.person img.person {
+    max-height: 100px;
+    max-width: 100px;
 }

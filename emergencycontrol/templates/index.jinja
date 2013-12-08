@@ -6,7 +6,7 @@
 {% if current_user.is_anonymous() %}
 You are not logged in.
 {% else %}
-Hi, <strong>{{ current_user.username }}</strong>!
+Hi, <strong>{{ current_user.name }}</strong>!
 {% endif %}
 </p>
 {% endblock %}
