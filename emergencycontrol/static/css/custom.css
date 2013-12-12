@@ -9,7 +9,7 @@
 }
 
 .droppable {
-	padding: 3px;
+     padding: 3px;
 }
 
 #calendar_load_switch {
@@ -17,14 +17,18 @@
 }
 
 .week {
-	border: 1px solid #e3e3e3;
-	margin-bottom: 10px;
-	margin-right: 10px;
-	border-radius: 4px;
-	padding: 4px;
+     border: 1px solid #e3e3e3;
+     margin-bottom: 10px;
+     margin-right: 10px;
+     border-radius: 4px;
+     padding: 4px;
 }
 
 #ems_rotation {
+    margin-top: 20px;
+}
+
+#ems_rotation > div {
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -34,17 +38,17 @@
     overflow: hidden;
 }
 .draggable-hover {
-	background-color:#eed;
-	border-radius: 4px;
+    background-color:#eed;
+    border-radius: 4px;
 }
 
 .droppable-hover {
-	background-color:#eed;
-	border-radius: 4px;
+     background-color:#eed;
+     border-radius: 4px;
 }
 
 .notassigned {
-	background-color: #fdd;
+     background-color: #fdd;
 }
 
 textarea {
