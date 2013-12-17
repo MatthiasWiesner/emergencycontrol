@@ -1,39 +1,22 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from sqlalchemy.ext.declarative import declarative_base
 from collections import OrderedDict
-
-db_engine = None
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
+from emergencycontrol import db
 
 
-def init_engine(db_uri):
-    global db_engine
-    db_engine = create_engine(db_uri, encoding='utf-8')
-    db_session.configure(bind=db_engine)
+#def init_database():
+#    Base.metadata.create_all(bind=db)
 
 
-def init_db():
-    Base.metadata.create_all(bind=db_engine)
+#def clear_db():
+#    Base.metadata.drop_all(bind=db)
 
 
-def clear_db():
-    Base.metadata.drop_all(bind=db_engine)
+#class Base(object):
+#    id = Column(Integer, primary_key=True)
 
-
-class Base(object):
-    id = Column(Integer, primary_key=True)
-
-
-class HasUniqueName(object):
-    name = Column(Text, nullable=False, unique=True)
-
-    def __repr__(self):
-        return '<%s(%r, %r)>' % (self.__class__.__name__, self.id, self.name)
-
-
-Base = declarative_base(cls=Base)
-Base.query = db_session.query_property()
+#Base = declarative_base(cls=Base)
+#Base.query = db.query_property()
 
 
 class Serializer(object):
@@ -47,7 +30,7 @@ class Serializer(object):
         return result
 
 
-class Person(Base, Serializer):
+class Person(db.Model, Serializer):
     __tablename__ = 'persons'
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
     id = Column(Integer, primary_key=True)
@@ -60,6 +43,7 @@ class Person(Base, Serializer):
     hd = Column(String(255))
     email = Column(String(255))
     active = Column(Boolean, nullable=False, default=True)
+    is_hero = Column(Boolean, nullable=False, default=False)
 
     def is_authenticated(self):
         return True
@@ -76,13 +60,13 @@ class Person(Base, Serializer):
     @staticmethod
     def load(google_id):
         try:
-            user = db_session.query(Person).filter_by(google_id=google_id).one()
+            user = Person.query.filter_by(google_id=google_id).one()
             return user
         except:
             return None
 
 
-class EmergencyService(Base, Serializer):
+class EmergencyService(db.Model, Serializer):
     __tablename__ = 'emergency_services'
     id = Column(Integer, primary_key=True)
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}

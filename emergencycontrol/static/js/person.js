@@ -42,3 +42,11 @@ $(".person_picture").on('dblclick', function(e){
     _this.append(update);
     update.focus();
 });
+
+$(".person_is_hero").on('click', function(e){
+    var person_id = $(this).attr("data-person-id");
+    $.post("/person/set", {
+        person_id : person_id,
+        is_hero : $(this).prop('checked')
+    });
+});

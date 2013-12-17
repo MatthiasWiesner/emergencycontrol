@@ -13,12 +13,14 @@ You are not logged in.
     <th class="picture">Picture<sup>*</sup></th>
     <th>Name</th>
     <th class="phone">Phone<sup>*</sup></th>
+    <th class="hero">Hero</th>
     <tr>
     {% for person in persons %}
       <tr>
       <td class="person_picture" data-person-id="{{ person.id }}">{% if person.picture %}<img class="person" src="{{ person.picture }}"/>{% endif %}</td>
       <td>{{ person.name }}</td>
       <td class="person_phone" data-person-id="{{ person.id }}">{{ person.phone }}</td>
+      <td class="person_hero"><input type="checkbox" class="person_is_hero" data-person-id="{{ person.id }}" {% if person.is_hero %}checked="true"{% endif %}"/></td>
       </tr>
     {% endfor %}
   </table>

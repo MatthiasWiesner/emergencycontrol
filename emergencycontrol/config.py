@@ -8,7 +8,7 @@ if not _credentials:
     for k in _credentials['CONFIG']['CONFIG_VARS']:
         vars()[k.upper()] = _credentials['CONFIG']['CONFIG_VARS'][k]
 
-DB_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf8'.format(
+SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf8'.format(
     user=_credentials['MYSQLS']['MYSQLS_USERNAME'],
     password=_credentials['MYSQLS']['MYSQLS_PASSWORD'],
     host=_credentials['MYSQLS']['MYSQLS_HOSTNAME'],

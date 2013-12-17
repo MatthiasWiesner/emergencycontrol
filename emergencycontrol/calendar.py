@@ -1,9 +1,9 @@
-from emergencycontrol import app
-from .model import Person, db_session, EmergencyService
+import json
+from emergencycontrol import app, db
+from .model import Person, EmergencyService
 from datetime import date, datetime, timedelta
 from flask_login import login_required
 from flask import request, render_template, redirect, url_for, Response
-import json
 
 
 @app.route('/calendar')
@@ -13,7 +13,7 @@ def calendar():
     this_week = EmergencyService.query \
         .filter(EmergencyService.start_date <= now) \
         .filter(EmergencyService.end_date > now).first()
-    persons = Person.query.all()
+    persons = Person.query.filter(Person.is_hero == True).all()
     for p in persons:
         p.active = False
         if this_week.person_id and p.id == this_week.person_id:
@@ -43,9 +43,9 @@ def load():
                 current_week = start_date.isocalendar()[1]
                 current_year = start_date.isocalendar()[0]
                 es = EmergencyService(week_nr=current_week, start_date=start_date, end_date=end_date)
-                db_session.add(es)
+                db.session.add(es)
                 new_weeks += 1
-            db_session.commit()
+            db.session.commit()
             return redirect(url_for('calendar'))
 
     elif request.args.get('type') == 'previous':
@@ -72,8 +72,8 @@ def set():
     week = EmergencyService.query.get(week_id)
     week.person_id = int(request.form['person_id'])
 
-    db_session.add(week)
-    db_session.commit()
+    db.session.add(week)
+    db.session.commit()
     return ''
 
 
@@ -92,7 +92,7 @@ def swap():
     week_from.person_id = person_to
     week_to.person_id = person_from
 
-    db_session.add(week_from)
-    db_session.add(week_to)
-    db_session.commit()
+    db.session.add(week_from)
+    db.session.add(week_to)
+    db.session.commit()
     return ''
