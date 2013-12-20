@@ -1,3 +1,7 @@
+.container {
+    width: 1500px;
+}
+
 .center {
      float: none;
      margin-left: auto;
@@ -14,6 +18,23 @@
 
 #calendar_load_switch {
     cursor:pointer;
+}
+
+#calendar_logs {
+    min-height: 330px;
+    margin-top: 20px;
+    overflow: auto;
+    width: 535px;
+    border:1px solid #ddd;
+    background-color:#fafafa;
+    font-family: courier;
+    border-radius: 4px;
+}
+#loglist {
+
+}
+.logentry {
+    white-space: nowrap;
 }
 
 .week {

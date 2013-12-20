@@ -4,21 +4,6 @@ from collections import OrderedDict
 from emergencycontrol import db
 
 
-#def init_database():
-#    Base.metadata.create_all(bind=db)
-
-
-#def clear_db():
-#    Base.metadata.drop_all(bind=db)
-
-
-#class Base(object):
-#    id = Column(Integer, primary_key=True)
-
-#Base = declarative_base(cls=Base)
-#Base.query = db.query_property()
-
-
 class Serializer(object):
 
     def to_dict(self):
@@ -44,6 +29,8 @@ class Person(db.Model, Serializer):
     email = Column(String(255))
     active = Column(Boolean, nullable=False, default=True)
     is_hero = Column(Boolean, nullable=False, default=False)
+
+    emergencyService_rel = relationship("EmergencyService")
 
     def is_authenticated(self):
         return True
@@ -75,4 +62,11 @@ class EmergencyService(db.Model, Serializer):
     end_date = Column(Date)
 
     person_id = Column(Integer, ForeignKey('persons.id'))
-    person_rel = relationship("Person", foreign_keys="[Person.id]", primaryjoin="Person.id==EmergencyService.person_id")
+
+
+class CalendarLog(db.Model, Serializer):
+    __tablename__ = 'calendar_log'
+    id = Column(Integer, primary_key=True)
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
+    text = Column(Text)
+    date = Column(DateTime)

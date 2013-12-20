@@ -1,8 +1,8 @@
 import json
 from emergencycontrol import app, db
-from .model import Person, EmergencyService
+from .model import Person, EmergencyService, CalendarLog
 from datetime import date, datetime, timedelta
-from flask_login import login_required
+from flask_login import current_user, login_required
 from flask import request, render_template, redirect, url_for, Response
 
 
@@ -65,14 +65,32 @@ def load():
     return Response(json.dumps(data_list),  mimetype='application/json')
 
 
+@app.route('/calendar/logs')
+@login_required
+def logs():
+    data = [log.to_dict() for log in CalendarLog.query.order_by(CalendarLog.id.desc()).all()]
+    return Response(json.dumps(data),  mimetype='application/json')
+
+
 @app.route('/calendar/set', methods=['POST'])
 @login_required
 def set():
     week_id = int(request.form['week_id'])
     week = EmergencyService.query.get(week_id)
     week.person_id = int(request.form['person_id'])
-
     db.session.add(week)
+
+    person = Person.query.get(int(request.form['person_id']))
+    d = datetime.now()
+    log = CalendarLog()
+    log.date = d
+    log.text = '{date} - {current_user} set {hero} as hero for week {week}'.format(
+        date=d.strftime("%d.%m.%Y %H:%M"),
+        current_user=current_user.name,
+        hero=person.name,
+        week=week.week_nr
+    )
+    db.session.add(log)
     db.session.commit()
     return ''
 
@@ -94,5 +112,20 @@ def swap():
 
     db.session.add(week_from)
     db.session.add(week_to)
+
+    d = datetime.now()
+    log = CalendarLog()
+    log.date = d
+    hero_from = Person.query.get(week_from.person_id)
+    hero_to = Person.query.get(week_to.person_id)
+    log.text = '{date} - {current_user} swapped {hero_from}(wnr:{week_from}) with {hero_to}(wnr:{week_to})'.format(
+        date=d.strftime("%d.%m.%Y %H:%M"),
+        current_user=current_user.name,
+        hero_from=hero_from.name,
+        hero_to=hero_to.name,
+        week_from=week_from.week_nr,
+        week_to=week_to.week_nr,
+    )
+    db.session.add(log)
     db.session.commit()
     return ''

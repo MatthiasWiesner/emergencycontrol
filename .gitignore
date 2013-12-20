@@ -5,3 +5,4 @@
 creds.json
 dump.sql
 tmp
+migrations

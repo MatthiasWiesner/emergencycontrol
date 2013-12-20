@@ -1,3 +1,20 @@
+function loadLogs(){
+    $.get("/calendar/logs")
+        .done(function(data){
+            console.log(data);
+            $('#calendar_logs').empty();
+            var loglist = $("<ul id='loglist'>");
+            $.each(data, function(i, log){
+                var l = $("<li class='logentry'>");
+                l.text(log.text);
+                loglist.append(l);
+            });
+            $('#calendar_logs').append(loglist);
+        }
+    );
+}
+
+
 function initDragDrop(){
     $(".draggable").draggable({
         helper : "clone",
@@ -19,7 +36,7 @@ function initDragDrop(){
                 $.post("/calendar/swap", {
                     week_from_id : ui.draggable.attr("data-week-id"),
                     week_to_id : $(this).attr("data-week-id")
-                });
+                }).done(function(){loadLogs();});
 
             } else if(ui.draggable.attr("data-person-id") != undefined) {
                 $(this).text(nameFrom);
@@ -29,7 +46,7 @@ function initDragDrop(){
                 $.post("/calendar/set", {
                     person_id : ui.draggable.attr("data-person-id"),
                     week_id : $(this).attr("data-week-id")
-                });
+                }).done(function(){loadLogs();});
             }
         }
     });
@@ -81,3 +98,4 @@ function switchLoad(type){
 
 loadWeeks("next");
 switchLoad("previous");
+loadLogs();
