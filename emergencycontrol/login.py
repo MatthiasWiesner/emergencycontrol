@@ -51,7 +51,7 @@ def login():
     if current_user.is_authenticated():
         return redirect(url_for('index'))
 
-    callback=url_for('google_callback', _external=True)
+    callback=url_for('google_callback', _external=True, _scheme='https')
     return google.authorize(callback=callback)
 
 
