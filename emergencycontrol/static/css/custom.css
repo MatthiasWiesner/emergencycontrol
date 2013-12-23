@@ -1,7 +1,3 @@
-.container {
-    width: 1500px;
-}
-
 .center {
      float: none;
      margin-left: auto;
@@ -29,6 +25,8 @@
     background-color:#fafafa;
     font-family: courier;
     border-radius: 4px;
+    position: absolute;
+    left: 1109px;
 }
 #loglist {
 
