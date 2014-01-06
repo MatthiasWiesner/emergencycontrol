@@ -7,7 +7,7 @@
      padding: 3px;
 }
 
-#calendar_load_switch {
+#calendar_previous, #calendar_next {
     cursor:pointer;
 }
 
@@ -18,6 +18,8 @@
     background-color:#fafafa;
     font-family: courier;
     border-radius: 4px;
+    height: 200px;
+    overflow: auto;
 }
 #loglist {
 
@@ -32,6 +34,14 @@
      margin-right: 10px;
      border-radius: 4px;
      padding: 4px;
+}
+
+.week_head {
+    display: block;
+}
+.week_month {
+    display: block;
+    float: right;
 }
 
 #ems_rotation {

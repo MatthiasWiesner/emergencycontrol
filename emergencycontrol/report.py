@@ -9,7 +9,7 @@ from flask.ext.script import Command
 class Report(Command):
     def run(self):
         while True:
-            sleep(10)
+            sleep(86400) # One day long
             now = datetime.date.today()
             month = now.month - 1
             year = now.year
@@ -19,7 +19,7 @@ class Report(Command):
 
             one_month_ago = datetime.date(day=1, month=month, year=year)
 
-            if now.day == 6:
+            if now.day == 1:
                 report_list = []
                 weeks = EmergencyService.query \
                     .filter(EmergencyService.start_date >= one_month_ago) \

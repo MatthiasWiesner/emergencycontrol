@@ -18,51 +18,53 @@ def calendar():
         p.active = False
         if this_week.person_id and p.id == this_week.person_id:
             p.active = True
-    return render_template('calendar.jinja', persons=persons)
+    now = date.today()
+    return render_template('calendar.jinja', persons=persons, init_date=now)
 
 
 @app.route('/calendar/load')
 @login_required
 def load():
-    now = date.today()
-    if request.args.get('type') == 'next':
-        weeks = EmergencyService.query\
-            .filter(EmergencyService.end_date >= now)\
-            .order_by(EmergencyService.start_date.asc()).all()
+    fetch_type = request.args.get('fetch_type')
+    init_date = datetime.strptime(request.args.get('init_date'), "%Y-%m-%d").date()
 
-        c = len(weeks)
-        if c < 12:
-            last_week = weeks[c-1]
-            current_year = last_week.end_date.year
-            current_week = last_week.week_nr
-            new_weeks = 0
-            while new_weeks < 12-c:
-                current_week += 1
-                start_date = datetime.strptime('{0} {1} 1'.format(current_year, current_week-1), '%Y %W %w')
-                end_date = start_date + timedelta(days=7, seconds=-1)
+    if fetch_type == 'next':
+        day_of_week = init_date.weekday()
+        start_date = (init_date - timedelta(days=day_of_week))
+
+        start_dates = [start_date + timedelta(days=(7*i)) for i in range(12)]
+        weeks = EmergencyService.query.filter(EmergencyService.start_date.in_(start_dates)).all()
+        week_start_dates = [w.start_date for w in weeks]
+
+        for i, start_date in enumerate(start_dates):
+            if start_date not in week_start_dates:
                 current_week = start_date.isocalendar()[1]
-                current_year = start_date.isocalendar()[0]
-                es = EmergencyService(week_nr=current_week, start_date=start_date, end_date=end_date)
-                db.session.add(es)
-                new_weeks += 1
-            db.session.commit()
-            return redirect(url_for('calendar'))
+                week = EmergencyService(week_nr=current_week, start_date=start_date, end_date=(start_date + timedelta(days=7, seconds=-1)))
+                db.session.add(week)
+                weeks.insert(i, week)
+        db.session.commit()
 
-    elif request.args.get('type') == 'previous':
+    if fetch_type == 'previous':
         weeks = EmergencyService.query\
-            .filter(EmergencyService.start_date <= now)\
-            .order_by(EmergencyService.start_date.desc()).all()
+            .filter(EmergencyService.end_date < init_date)\
+            .order_by(EmergencyService.end_date.desc())\
+            .limit(12)\
+            .all()
+        weeks.reverse()
 
     persons = Person.query.all()
     data_list = []
     for week in weeks:
         w = week.to_dict()
+        w['month'] = week.start_date.strftime("%d") + ' ' + week.start_date.strftime("%B")
         for p in persons:
             if w['person_id'] \
                 and p.id == int(w['person_id']):
                 w['person'] = p.to_dict()
         data_list.append(w)
-    return Response(json.dumps(data_list),  mimetype='application/json')
+
+    data = dict(weeks=data_list, prev=str(weeks[0].start_date), next=str(weeks[-1].end_date + timedelta(days=1)))
+    return Response(json.dumps(data),  mimetype='application/json')
 
 
 @app.route('/calendar/logs')
@@ -74,7 +76,7 @@ def logs():
 
 @app.route('/calendar/set', methods=['POST'])
 @login_required
-def set():
+def calendar_set():
     week_id = int(request.form['week_id'])
     week = EmergencyService.query.get(week_id)
     week.person_id = int(request.form['person_id'])
@@ -97,7 +99,7 @@ def set():
 
 @app.route('/calendar/swap', methods=['POST'])
 @login_required
-def swap():
+def calendar_swap():
     week_from_id = int(request.form['week_from_id'])
     week_to_id = int(request.form['week_to_id'])
 
