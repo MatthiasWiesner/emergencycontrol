@@ -14,6 +14,9 @@ SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf
     host=_credentials['MYSQLS']['MYSQLS_HOSTNAME'],
     dbname=_credentials['MYSQLS']['MYSQLS_DATABASE'])
 
+SENDGRID_USERNAME = _credentials['SENDGRID']['SENDGRID_USERNAME']
+SENDGRID_PASSWORD = _credentials['SENDGRID']['SENDGRID_PASSWORD']
+
 DEBUG = bool(os.getenv('DEBUG'))
 SECRET_KEY = 'foobarbaz'
 PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
