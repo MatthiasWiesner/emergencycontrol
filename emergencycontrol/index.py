@@ -1,6 +1,8 @@
 import os
 from flask import (
     render_template,
+    redirect,
+    url_for,
     send_from_directory)
 
 from emergencycontrol import app, db
@@ -8,7 +10,7 @@ from emergencycontrol import app, db
 
 @app.route('/')
 def index():
-    return render_template('index.jinja')
+    return redirect(url_for('calendar'))
 
 
 @app.route('/favicon.ico')

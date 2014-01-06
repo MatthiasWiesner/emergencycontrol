@@ -17,7 +17,6 @@
       <span class=brand>emergencycontrol</span>
         <ul class=nav>
         {% for endpoint in [
-          'index',
           'person' if not current_user.is_anonymous() else False,
           'calendar' if not current_user.is_anonymous() else False,
           'alerts' if not current_user.is_anonymous() else False,
