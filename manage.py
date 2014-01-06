@@ -10,8 +10,7 @@ manager.add_command("runserver", server)
 migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
-
-manager.add_command('report', Report)
+manager.add_command('report', Report())
 
 
 if __name__ == '__main__':
