@@ -2,6 +2,7 @@ from flask_script import Manager, Server
 from flask_migrate import Migrate, MigrateCommand
 from emergencycontrol import app, db
 from emergencycontrol.report import Report
+from emergencycontrol.heronotify import HeroNotify
 
 manager = Manager(app)
 
@@ -11,6 +12,7 @@ migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
 manager.add_command('report', Report())
+manager.add_command('notify', HeroNotify())
 
 
 if __name__ == '__main__':

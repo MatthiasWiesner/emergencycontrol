@@ -1,2 +1,3 @@
 web: python manage.py runserver --port=$PORT
-worker: python manage.py report
+report: python manage.py report
+notify: python manage.py notify
