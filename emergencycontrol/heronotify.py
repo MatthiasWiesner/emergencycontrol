@@ -93,4 +93,8 @@ Baaam! You are the operational ninja hero next week from {start_date} to {end_da
 
                 s.web.send(message)
                 print "Notification was send to {hero}".format(**data)
-            sleep(86400)
+
+            m = now + datetime.timedelta(days=1)
+            t = datetime.datetime(m.year, m.month, m.day, 7, 0, 0)
+            n = datetime.datetime.today()
+            sleep(int((t - n).total_seconds()))

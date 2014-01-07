@@ -4,22 +4,21 @@ from model import Person, EmergencyService
 import sendgrid
 from emergencycontrol import app
 
-from flask.ext.script import Command
+from flask_script import Command
+
 
 class Report(Command):
     def run(self):
         while True:
-            sleep(86400) # One day long
             now = datetime.date.today()
-            month = now.month - 1
-            year = now.year
-            if month < 1:
-                year = now.year - 1
-                month = 12
-
-            one_month_ago = datetime.date(day=1, month=month, year=year)
-
             if now.day == 1:
+                month = now.month - 1
+                year = now.year
+                if month < 1:
+                    year = now.year - 1
+                    month = 12
+                one_month_ago = datetime.date(day=1, month=month, year=year)
+
                 report_list = []
                 weeks = EmergencyService.query \
                     .filter(EmergencyService.start_date >= one_month_ago) \
@@ -99,3 +98,8 @@ table, td, th
 
                 s.web.send(message)
                 print('Send email on {}: {}'.format(now, content))
+
+            m = now + datetime.timedelta(days=1)
+            t = datetime.datetime(m.year, m.month, m.day, 7, 0, 0)
+            n = datetime.datetime.today()
+            sleep(int((t - n).total_seconds()))
