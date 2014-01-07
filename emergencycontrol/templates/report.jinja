@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+    border-collapse:collapse;
+}
+table, td, th {
+    border:1px solid #aaa;
+    padding: 3px;
+}
+th {
+    background-color: #aaa;
+    color: white;
+    font-style: bold;
+}
+</style>
+</head>
+<body>
+<h2>Dear Claudia,</h2>
+<table>
+    <tr>
+        <th>Week</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Hero</th>
+    </tr>
+    {% for row in report_list %}
+    <tr>
+        <td>
+            {{row.week}}
+        </td>
+        <td>
+            {{row.start_date}}
+        </td>
+        <td>
+            {{row.end_date}}
+        </td>
+        <td>
+            {{row.hero}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

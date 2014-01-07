@@ -1,10 +1,10 @@
-from time import sleep
 import datetime
-from model import Person, EmergencyService
 import sendgrid
-from emergencycontrol import app
-
+from time import sleep
+from flask import render_template
 from flask_script import Command
+from model import Person, EmergencyService
+from emergencycontrol import app
 
 
 class Report(Command):
@@ -33,71 +33,15 @@ class Report(Command):
                             'hero': person.name}
                     report_list.append(report)
 
-
-
-                # make a secure connection to SendGrid
                 s = sendgrid.Sendgrid(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
 
-                content ="""
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-table
-{
-    border-collapse:collapse;
-}
-table, td, th
-{
-    border:1px solid black;
-    padding: 3px;
-}
-</style>
-</head>
-
-<body>
-
-<h2>Dear Claudia,</h2>
-
-<table>
-<tr>
-    <th>Week</th>
-    <th>Start Date</th>
-    <th>End Date</th>
-    <th>Hero</th>
-</tr>
-"""
-
-                for r in report_list:
-                    content += """
-<tr>
-        <td>
-            {}
-        </td>
-        <td>
-            {}
-        </td>
-        <td>
-            {}
-        </td>
-        <td>
-            {}
-        </td>
-</tr>
-""".format(r.get('week'), r.get('start_date'), r.get('end_date'), r.get('hero'))
-
-                content += """
-</table>
-</body>
-</html>
-"""
+                content = render_template("report.jinja", report_list=report_list)
 
                 message = sendgrid.Message("ops@cloudcontrol.de", "Operations Hero: Report for {}".format(one_month_ago.strftime('%B of %Y')), "Report of the month", content)
                 message.add_to(["cl@cloudcontrol.de", "fa@cloudcontrol.de", "pe@cloudcontrol.de"],
                                ["Claudia Leihener", "Fernando Alvarez", "Peter Elsayeh"])
-
                 s.web.send(message)
-                print('Send email on {}: {}'.format(now, content))
+                print('Send email on {}'.format(now))
 
             m = now + datetime.timedelta(days=1)
             t = datetime.datetime(m.year, m.month, m.day, 7, 0, 0)

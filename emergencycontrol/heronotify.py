@@ -5,6 +5,7 @@ import sendgrid
 from emergencycontrol import app
 
 from flask_script import Command
+from flask import render_template
 
 
 class HeroNotify(Command):
@@ -26,68 +27,8 @@ class HeroNotify(Command):
                 # make a secure connection to SendGrid
                 s = sendgrid.Sendgrid(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
 
-                content ="""
-
-Dear {hero},
-
-Baaam! You are the operational ninja hero next week from {start_date} to {end_date}
-
-
-                 :N/
-                mom/
-               .M`.m/
-               `M- .m/
-                od` -m:
-                 hs  :m-
-                 `do  /m.
-                  .m/  +d`
-                   -m:  sh`
-                    :m-  yy
-                     /m. `hs
-                      +d` `do
-                       sh` .d+               .-/+syyhhhyyss+/:-.`
-                        yy` -m:          `-odmMMMMMMMMMMMMMMMMNNmdyo/-.
-                        `hs  -m-       `/dMMMMMMMMMMMMMMMMMMMMMMMMMMMNmhs/-`
-                         `d+  :m.     .hMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNmh+-`
-                          .m/  +d.   `dMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNmmh+s
-                           -m:  od`  -MMMNNNNNNMMMMMNNNNNNNNNNmmmmdhysoo/:-.`  :+
-                            :m-  sh` `NMm/:-:::::::::::----...``.-`   /dh+   `+d`
-                             /m.  yy  :mMNds:.`                -NMd.  sMMN`.+dN:
-                              +d` `hs  .sNMMMMmhs+:.```        -NMm. ``oNmdMMM+
-                               od` `d+   .omNMMMMMMMNmdhyyssoooohNyyhmNMMMMMN/
-                                yh  .m/     -odNMMMMMMMMMMMMMMMMMMMMMMMMMMNs`
-                                 hs -sMy/      ./ymMMMMMMMMMMMMMMMMMMMMMNs.    `:sy
-                                 `NNMMMMm`         ./sdMMMMMMMMMMMMMMMmo`   .+hNMMN
-                                  hMMMMMMs          ods//odMMMMMMMNdo-   .odMMMMMMM
-                                  `hMMMMMM+        sMMMMMdo:+oo+/-    .odMMMMMMMMMd
-                                   `dMMMMMM:      sMMMMMMMMMmo.    .+dMMMMMMMMMMMm-
-                                  -NMMMMMMMNso+/::+++syhdmMMMMNy.`hNMMMMMMMMMMMm+`
-                                   /MMMMMMMMMMMMMMNNNmdhssMMMMMMN+:NMMMMMMMMNy:`
-                                    /NMMMMMMMMMMMMMMMMMMMMMMMMMMMM//MMMMMNh/`
-                                     .smMMMMMMMMMMMMMMMMMMMMMMMMMMN`dMNh+.
-                                       `-dMMNddmNMMMMMMMMMMMMMMMMMM/:/.
-                                         `...`so++sMMMMMMMMMMMMMMMMs
-                                             .MMMNNMMMMMMMMMMMMMMMMs
-                                             :MMMMMMMMMMMMMMMMMMMMM/
-                                             /MMMMMMMMMMMMMMMMMMMMm`
-                                             -MMMMMMMMMMMMMMMMMMMm:
-                                              NMMMMMMMMMMMMMMNmdo.
-                                              dMMMMMMMMmysso++o`
-                                             `NMMMMMMMN.sdmmNMM.
-                                             oMMMMMMMM//MMMMMMM.
-                                            -NMMMMMMMh`NMMMMMMM.
-                                            dMMMMMMMN..MMMMMMMM.
-                                           /MMMMMMMM/ `MMMMMMMM`
-                                           dMMMMMMMs   dMMMMMMN
-                                           mMMMMMMd`   .hNMMMMd
-                                           :NMMMMN.      .+yNMo
-                                            -mMMN-           -`
-                                             `oN:
-                                               `
-
-"""
-
-                message = sendgrid.Message("ops@cloudcontrol.de", "You are operations hero", content.format(**data))
+                content = render_template('notify.jinja', **data)
+                message = sendgrid.Message("ops@cloudcontrol.de", "You are operations hero", text="You are operations hero", html=content)
                 message.add_to(["mw@cloudcontrol.de", person.email],
                                ["Matthias Wiesner", person.name])
 
