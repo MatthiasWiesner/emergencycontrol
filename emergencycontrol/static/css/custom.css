@@ -104,6 +104,20 @@ div#alerts .mail {
     cursor: pointer;
 }
 
+div.alerts_overview {
+    padding: 6px;
+    font-size: 120%;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+div.alerts_overview.right {
+    float: left;
+}
+div.alerts_overview.left {
+    float: right;
+}
+
 div#alerts .mail .payload {
     display: none;
     font-family: courier;

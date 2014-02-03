@@ -1,7 +1,7 @@
 import imaplib
 import email
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time as dtime
 from emergencycontrol import app
 from .model import Person, EmergencyService
 from flask_login import login_required
@@ -38,8 +38,10 @@ def alerts():
     persons = Person.query.all()
 
     for week in weeks_until_today:
-        week.adcloud_count = 0
         week.mails = []
+        week.count_alarm_worktime = 0
+        week.count_alarm_nighttime = 0
+
         for mail in mails:
             if 'Fixed:' in mail.get_payload() or 'UP:' in mail.get_payload():
                 continue
@@ -47,10 +49,14 @@ def alerts():
             pd = email.utils.parsedate(mail.get("Date"))
             mdate = date.fromtimestamp(time.mktime(pd))
             mail.date = datetime.fromtimestamp(time.mktime(pd)).strftime('%d.%m.%Y - %H:%M:%S')
+
             if mdate >= week.start_date and mdate < week.end_date:
+                mtime = datetime.fromtimestamp(time.mktime(pd))
+                if mtime.time() >= dtime(18, 0) or mtime.time() < dtime(9, 0):
+                    week.count_alarm_nighttime += 1
+                else:
+                    week.count_alarm_worktime += 1
                 week.mails.append(mail)
-                if 'adcloud' in mail.get_payload().lower():
-                    week.adcloud_count += 1
 
         for p in persons:
             if p.id == week.person_id:
