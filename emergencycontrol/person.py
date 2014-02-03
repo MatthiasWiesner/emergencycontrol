@@ -6,9 +6,10 @@ from flask import render_template, redirect, url_for, flash, request
 from emergencycontrol import db
 
 @app.route('/person', methods=['GET', 'POST'])
+@login_required
 def person():
     form = PersonForm()
-    persons = Person.query.all()
+    persons = Person.query.filter(Person.is_gone==False).all()
 
     if form.validate_on_submit():
         person = Person(name=form.name.data,
@@ -22,6 +23,7 @@ def person():
 
 
 @app.route('/person/set', methods=['POST'])
+@login_required
 def person_set():
     person_id = int(request.form['person_id'])
     person = Person.query.get(person_id)
@@ -31,6 +33,8 @@ def person_set():
         person.picture = request.form['picture']
     if 'is_hero' in request.form:
         person.is_hero = request.form['is_hero'] == 'true'
+    if 'is_gone' in request.form:
+        person.is_gone = request.form['is_gone'] == 'true'
     db.session.add(person)
     db.session.commit()
     return ''

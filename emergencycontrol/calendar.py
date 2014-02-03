@@ -13,7 +13,7 @@ def calendar():
     this_week = EmergencyService.query \
         .filter(EmergencyService.start_date <= now) \
         .filter(EmergencyService.end_date > now).first()
-    persons = Person.query.filter(Person.is_hero == True).all()
+    persons = Person.query.filter(Person.is_hero == True, Person.is_gone == False).all()
     for p in persons:
         p.active = False
         if this_week.person_id and p.id == this_week.person_id:

@@ -56,6 +56,7 @@ def alerts():
                     week.count_alarm_nighttime += 1
                 else:
                     week.count_alarm_worktime += 1
+
                 week.mails.append(mail)
 
         for p in persons:

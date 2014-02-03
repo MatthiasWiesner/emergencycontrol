@@ -50,3 +50,11 @@ $(".person_is_hero").on('click', function(e){
         is_hero : $(this).prop('checked')
     });
 });
+
+$(".person_is_gone").on('click', function(e){
+    var person_id = $(this).attr("data-person-id");
+    $.post("/person/set", {
+        person_id : person_id,
+        is_gone : $(this).prop('checked')
+    });
+});

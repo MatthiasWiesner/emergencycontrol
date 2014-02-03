@@ -29,6 +29,7 @@ class Person(db.Model, Serializer):
     email = Column(String(255))
     active = Column(Boolean, nullable=False, default=True)
     is_hero = Column(Boolean, nullable=False, default=False)
+    is_gone = Column(Boolean, nullable=False, default=False)
 
     emergencyService_rel = relationship("EmergencyService")
 
