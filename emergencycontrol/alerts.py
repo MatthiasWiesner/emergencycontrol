@@ -41,7 +41,7 @@ def alerts():
         week.adcloud_count = 0
         week.mails = []
         for mail in mails:
-            if not ('fixed' or 'up') in mail.get_payload().lower():
+            if (not 'fixed') or (not 'up') in mail.get_payload().lower():
                 pd = email.utils.parsedate(mail.get("Date"))
                 mdate = date.fromtimestamp(time.mktime(pd))
                 mail.date = datetime.fromtimestamp(time.mktime(pd)).strftime('%d.%m.%Y - %H:%M:%S')
