@@ -41,14 +41,16 @@ def alerts():
         week.adcloud_count = 0
         week.mails = []
         for mail in mails:
-            if not ( 'fixed' in mail.get_payload().lower() or 'up' in mail.get_payload().lower() ):
-                pd = email.utils.parsedate(mail.get("Date"))
-                mdate = date.fromtimestamp(time.mktime(pd))
-                mail.date = datetime.fromtimestamp(time.mktime(pd)).strftime('%d.%m.%Y - %H:%M:%S')
-                if mdate >= week.start_date and mdate < week.end_date:
-                    week.mails.append(mail)
-                    if 'adcloud' in mail.get_payload().lower():
-                        week.adcloud_count += 1
+            if 'Fixed:' in mail.get_payload() or 'UP:' in mail.get_payload():
+                continue
+
+            pd = email.utils.parsedate(mail.get("Date"))
+            mdate = date.fromtimestamp(time.mktime(pd))
+            mail.date = datetime.fromtimestamp(time.mktime(pd)).strftime('%d.%m.%Y - %H:%M:%S')
+            if mdate >= week.start_date and mdate < week.end_date:
+                week.mails.append(mail)
+                if 'adcloud' in mail.get_payload().lower():
+                    week.adcloud_count += 1
 
         for p in persons:
             if p.id == week.person_id:
