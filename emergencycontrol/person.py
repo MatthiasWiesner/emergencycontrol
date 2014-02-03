@@ -17,7 +17,6 @@ def person():
         db.session.add(person)
         db.session.commit()
         persons = Person.query.all()
-        flash('Person saved!', 'success')
 
     return render_template('persons.jinja', form=form, persons=persons)
 
@@ -42,5 +41,4 @@ def person_set():
 def reset():
     Person.query.delete()
     db.session.commit()
-    flash('Person table resetted!', 'success')
     return redirect(url_for('person'))

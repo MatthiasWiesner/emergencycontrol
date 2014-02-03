@@ -4,8 +4,7 @@ from flask import (
     session,
     request,
     redirect,
-    url_for,
-    flash)
+    url_for)
 from flask_login import (
     login_user,
     logout_user,
@@ -66,7 +65,6 @@ def google_callback(resp):
         if r.ok:
             google_profile = loads(r.text)
             if not 'hd' in google_profile or google_profile['hd'] != 'cloudcontrol.de':
-                flash("You are not from cloudControl", 'error')
                 return redirect(url_for('index'))
             person = Person.query.filter_by(google_id=google_profile['id']).first()
             if person is None:
@@ -78,12 +76,7 @@ def google_callback(resp):
                 db.session.add(person)
                 db.session.commit()
             if login_user(person):
-                flash('Logged in successfully!', 'success')
                 return redirect(request.args.get('next') or url_for('index'))
-            else:
-                flash('This person is disabled!', 'error')
-        else:
-            flash('Invalid google response!', 'error')
 
     return redirect(url_for('index'))
 
@@ -92,5 +85,4 @@ def google_callback(resp):
 @login_required
 def logout():
     logout_user()
-    flash('You have logged out!')
     return redirect(url_for('index'))
