@@ -111,12 +111,6 @@ div.alerts_overview {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-div.alerts_overview.right {
-    float: left;
-}
-div.alerts_overview.left {
-    float: right;
-}
 
 div#alerts .mail .payload {
     display: none;

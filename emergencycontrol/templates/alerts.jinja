@@ -7,14 +7,14 @@ You are not logged in.
 </p>
 {% else %}
 <div class="row">
-    <div class="span3 alerts_overview right">
+    <div class="span3 alerts_overview">
         <div>Total nr alerts this week: {{ weeks[0].mails|length }}</div>
         <div>Total nr alerts last week: {{ weeks[1].mails|length }}</div>
     </div>
-    <div class="span4 alerts_overview right">
-        <div>Last week accumulative until {{ weekday }}: {{ last_week_accumulative }}</div>
+    <div class="span4 alerts_overview">
+        <div>Alerts last week until {{ weekday }}: {{ last_week_accumulative }}</div>
     </div>
-    <div class="span4 alerts_overview left">
+    <div class="span4 alerts_overview">
         <div>Alerts this week between 18 - 09: {{ weeks[0].count_alarm_nighttime }}</div>
         <div>Alerts last week between 18 - 09: {{ weeks[1].count_alarm_nighttime }}</div>
     </div>
