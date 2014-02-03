@@ -41,6 +41,7 @@ def alerts():
         week.mails = []
         week.count_alarm_worktime = 0
         week.count_alarm_nighttime = 0
+        week.days = {i:0 for i in range(7)}
 
         for mail in mails:
             if 'Fixed:' in mail.get_payload() or 'UP:' in mail.get_payload():
@@ -52,15 +53,18 @@ def alerts():
 
             if mdate >= week.start_date and mdate < week.end_date:
                 mtime = datetime.fromtimestamp(time.mktime(pd))
+                week.days[mtime.weekday()] += 1
                 if mtime.time() >= dtime(18, 0) or mtime.time() < dtime(9, 0):
                     week.count_alarm_nighttime += 1
                 else:
                     week.count_alarm_worktime += 1
-
                 week.mails.append(mail)
 
         for p in persons:
             if p.id == week.person_id:
                 week.person = p
 
-    return render_template('alerts.jinja', weeks=weeks_until_today)
+    this_week_accumulative = sum(x[1] for x in weeks_until_today[0].days.iteritems() if x[0] <= now.weekday())
+    last_week_accumulative = sum(x[1] for x in weeks_until_today[1].days.iteritems() if x[0] <= now.weekday())
+
+    return render_template('alerts.jinja', weeks=weeks_until_today, this_week_accumulative=this_week_accumulative, last_week_accumulative=last_week_accumulative, weekday=now.strftime("%A"))
