@@ -7,10 +7,6 @@ You are not logged in.
 </p>
 {% else %}
 <div id="container"></div>
-<script type="text/javascript">
-var taskOpen = {{ task_open }};
-var taskExecuted = {{ task_executed }};
-</script>
 <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
 <script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
 {% endif %}
