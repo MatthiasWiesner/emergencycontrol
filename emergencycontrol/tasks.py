@@ -12,6 +12,6 @@ def showtasks():
 
 
 @app.route('/tasks')
-@login_required
+#@login_required
 def tasks():
     return urllib2.urlopen("https://kpi.cloudcontrolled.com/kpi/tasks").read()
