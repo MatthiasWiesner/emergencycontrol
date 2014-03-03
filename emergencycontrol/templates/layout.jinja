@@ -20,6 +20,7 @@
           'person' if not current_user.is_anonymous() else False,
           'calendar' if not current_user.is_anonymous() else False,
           'alerts' if not current_user.is_anonymous() else False,
+          'showtasks' if not current_user.is_anonymous() else False,
           'login' if current_user.is_anonymous() else 'logout',
         ] %}
         {% if endpoint %}

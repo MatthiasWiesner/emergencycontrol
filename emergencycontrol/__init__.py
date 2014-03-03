@@ -17,3 +17,4 @@ from . import login
 from . import calendar
 from . import person
 from . import alerts
+from . import tasks
