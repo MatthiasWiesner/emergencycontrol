@@ -68,7 +68,7 @@ def load():
 
 
 @app.route('/calendar/logs')
-#@login_required
+@login_required
 def logs():
     data = [log.to_dict() for log in CalendarLog.query.order_by(CalendarLog.id.desc()).all()]
     return Response(json.dumps(data),  mimetype='application/json')
