@@ -23,7 +23,7 @@ def calendar():
 
 
 @app.route('/calendar/load')
-@login_required
+#@login_required
 def load():
     fetch_type = request.args.get('fetch_type')
     init_date = datetime.strptime(request.args.get('init_date'), "%Y-%m-%d").date()
@@ -68,7 +68,7 @@ def load():
 
 
 @app.route('/calendar/logs')
-@login_required
+#@login_required
 def logs():
     data = [log.to_dict() for log in CalendarLog.query.order_by(CalendarLog.id.desc()).all()]
     return Response(json.dumps(data),  mimetype='application/json')
