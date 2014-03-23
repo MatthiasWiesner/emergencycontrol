@@ -2,6 +2,11 @@ import os
 import json
 from datetime import timedelta
 
+DEBUG = bool(os.getenv('DEBUG'))
+SECRET_KEY = 'foobarbaz'
+PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
+REMEMBER_COOKIE_DURATION = timedelta(days=30)
+
 _credentials = None
 if not _credentials:
     _credentials = json.load(open(os.environ['CRED_FILE']))
@@ -17,7 +22,3 @@ SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@{host}/{dbname}?charset=utf
 SENDGRID_USERNAME = _credentials['SENDGRID']['SENDGRID_USERNAME']
 SENDGRID_PASSWORD = _credentials['SENDGRID']['SENDGRID_PASSWORD']
 
-DEBUG = bool(os.getenv('DEBUG'))
-SECRET_KEY = 'foobarbaz'
-PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
-REMEMBER_COOKIE_DURATION = timedelta(days=30)
