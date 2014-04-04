@@ -33,14 +33,16 @@ class Report(Command):
                             'hero': person.name}
                     report_list.append(report)
 
-                s = sendgrid.Sendgrid(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
-
                 content = render_template("report.jinja", report_list=report_list)
+                sg = sendgrid.SendGridClient(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
 
-                message = sendgrid.Message("ops@cloudcontrol.de", "Operations Hero: Report for {}".format(one_month_ago.strftime('%B of %Y')), "Report of the month", content)
-                message.add_to(["cl@cloudcontrol.de", "fa@cloudcontrol.de", "pe@cloudcontrol.de"],
-                               ["Claudia Leihener", "Fernando Alvarez", "Peter Elsayeh"])
-                s.web.send(message)
+                message = sendgrid.Mail()
+                message.set_from("Operational hero <ops@cloudcontrol.de>")
+                message.set_subject("Operations Hero: Report for {}".format(one_month_ago.strftime('%B of %Y')))
+                message.set_text("Report of the month")
+                message.set_html(content)
+                message.add_to(["Claudia Leihener <cl@cloudcontrol.de>", "Fernando Alvarez <fa@cloudcontrol.de>", "Peter Elsayeh <pe@cloudcontrol.de>"])
+                sg.send(message)
                 print('Send email on {}'.format(now))
 
             m = now + datetime.timedelta(days=1)

@@ -25,14 +25,16 @@ class HeroNotify(Command):
                     'hero': person.name}
 
                 # make a secure connection to SendGrid
-                s = sendgrid.Sendgrid(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
-
                 content = render_template('notify.jinja', **data)
-                message = sendgrid.Message("ops@cloudcontrol.de", "You are operations hero", text="You are operations hero", html=content)
-                message.add_to(["mw@cloudcontrol.de", person.email],
-                               ["Matthias Wiesner", person.name])
+                sg = sendgrid.SendGridClient(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'], secure=True)
+                message = sendgrid.Mail()
+                message.add_to(["%s <%s>" % (person.name, person.email), 'MatthiasWiesner <mw+hero@cloudcontrol.de>'])
+                message.set_subject('You are operations hero')
+                message.set_text("You are operations hero")
+                message.set_html(content)
+                message.set_from('Operational Hero <ops@cloudcontrol.de>')
+                sg.send(message)
 
-                s.web.send(message)
                 print "Notification was send to {hero}".format(**data)
 
             m = now + datetime.timedelta(days=1)
