@@ -71,3 +71,12 @@ class CalendarLog(db.Model, Serializer):
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
     text = Column(Text)
     date = Column(DateTime)
+
+
+class Alert(db.Model, Serializer):
+    __tablename__ = 'alerts'
+    id = Column(Integer, primary_key=True)
+    __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_charset': 'utf8', 'mysql_collate': 'utf8_general_ci'}
+    subject = Column(Text)
+    payload = Column(Text)
+    datetime = Column(DateTime)

@@ -28,8 +28,8 @@ You are not logged in.
             <span class="total">Total messages: {{ week.mails|length }}</span>
             <ul>
             {% for m in week.mails %}
-                <li class="mail">{{ m.date }} - {{ m.get('Subject') }}
-                    <div class="payload">{{ m.get_payload() }}</div>
+                <li class="mail">{{ m.date }} - {{ m.subject }}
+                    <div class="payload">{{ m.payload }}</div>
                 </li>
             {% endfor %}
             </ul>

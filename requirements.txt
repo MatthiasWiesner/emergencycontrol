@@ -11,3 +11,4 @@ SQLAlchemy
 mysql-python
 requests==0.13.5
 sendgrid
+python-dateutil
