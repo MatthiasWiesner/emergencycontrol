@@ -4,6 +4,7 @@ from emergencycontrol import app, db
 from emergencycontrol.report import Report
 from emergencycontrol.heronotify import HeroNotify
 from emergencycontrol.alertmails import AlertMails
+from emergencycontrol.alertkpimails import AlertKpiMails
 
 manager = Manager(app)
 
@@ -15,6 +16,7 @@ manager.add_command('db', MigrateCommand)
 manager.add_command('report', Report())
 manager.add_command('notify', HeroNotify())
 manager.add_command('alerts', AlertMails())
+manager.add_command('alertkpi', AlertKpiMails())
 
 
 if __name__ == '__main__':
